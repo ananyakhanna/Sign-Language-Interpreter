@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GestSign - Gesture Sign Detection</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #video-container {
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            display: none; /* Initially hidden */
+        }
+
+        #video-feed {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            height: 100%;
+        }
+
+        #reference-image {
+            width: 300px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        #start-button, #close-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        #start-button:hover, #close-button:hover {
+            background-color: #2980b9;
+        }
+
+        #close-button {
+            display: none; /* Initially hidden */
+        }
+    </style>
+</head>
+<body>
+    <h1 style="color: #333;">GestSign - Gesture Sign Detection</h1>
+    <img id="reference-image" src="/static/image.jpg" alt="ASL Reference Image" />
+    <button id="start-button" onclick="startCamera()">Start Camera</button>
+    <button id="close-button" onclick="closeCamera()">Close Camera</button>
+    <div id="video-container">
+        <img id="video-feed" src="{{ url_for('video_feed') }}" alt="Video Feed">
+    </div>
+
+    <script>
+        async function startCamera() {
+            document.getElementById('start-button').style.display = 'none';
+            document.getElementById('close-button').style.display = 'block';
+            document.getElementById('video-container').style.display = 'block';
+
+            const response = await fetch('/start_camera');
+            if (response.ok) {
+                console.log('Camera started successfully');
+            } else {
+                console.error('Failed to start camera');
+            }
+        }
+
+        async function closeCamera() {
+            document.getElementById('start-button').style.display = 'block';
+            document.getElementById('close-button').style.display = 'none';
+            document.getElementById('video-container').style.display = 'none';
+
+            const response = await fetch('/close_camera');
+            if (response.ok) {
+                console.log('Camera closed successfully');
+            } else {
+                console.error('Failed to close camera');
+            }
+        }
+    </script>
+</body>
+</html>
